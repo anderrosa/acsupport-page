@@ -1,0 +1,240 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+@import 'tailwindcss';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  --font-heading: 'Raleway', ui-sans-serif, system-ui, sans-serif;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Cores da marca */
+  --color-navy: #003855;
+  --color-navy-hover: #004d6e;
+  --color-azure: #3e7489;
+  --color-azure-hover: #356879;
+  --color-cinza: #4e5459;
+  --color-brand-white: #ffffff;
+  --color-brand-black: #000000;
+  --color-void: #000001;
+  --color-void-muted: #020202;
+
+  /* Tokens semânticos */
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-foreground-subtle: var(--foreground-subtle);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+:root {
+  --radius: 0.625rem;
+
+  --surface: #121214;
+  --surface-raised: #1a1a1c;
+  --background: #000001;
+  --foreground: #ffffff;
+  --foreground-subtle: #a1a1aa;
+
+  --primary: #003855;
+  --primary-hover: #004d6e;
+  --primary-foreground: #ffffff;
+
+  --accent: #3e7489;
+  --accent-hover: #356879;
+  --accent-foreground: #ffffff;
+
+  --secondary: #4e5459;
+  --secondary-foreground: #ffffff;
+
+  --muted: #1a1a1c;
+  --muted-foreground: #a1a1aa;
+
+  --destructive: #dc2626;
+  --border: #27272a;
+  --input: #27272a;
+  --ring: #3e7489;
+}
+
+.dark {
+  --surface: #003855;
+  --surface-raised: #004d6e;
+  --background: #003855;
+  --foreground: #ffffff;
+  --foreground-subtle: #d1d5db;
+
+  --primary: #003855;
+  --primary-hover: #004d6e;
+  --primary-foreground: #ffffff;
+
+  --accent: #3e7489;
+  --accent-hover: #4a879c;
+  --accent-foreground: #ffffff;
+
+  --secondary: #4e5459;
+  --secondary-foreground: #ffffff;
+
+  --muted: #4e5459;
+  --muted-foreground: #d1d5db;
+
+  --destructive: #ef4444;
+  --border: #4e5459;
+  --input: #4e5459;
+  --ring: #3e7489;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    scroll-padding-top: 2.75rem;
+  }
+
+  @media (min-width: 48rem) {
+    html {
+      scroll-padding-top: 4.25rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    @apply overflow-x-clip bg-background font-sans text-base text-foreground antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading;
+  }
+}
+
+/* Figma glass: angle -45°, refraction 80, depth 20, dispersion 50, frost 0 */
+@layer components {
+  .glass-effect {
+    --glass-angle: 135deg;
+    --glass-refraction: 0.8;
+    --glass-depth: 20;
+    --glass-dispersion: 0.5;
+
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: transparent !important;
+    border: none;
+
+    box-shadow: 0 calc(var(--glass-depth) * 0.5px) calc(var(--glass-depth) * 1.2px)
+      rgba(0, 0, 0, 0.28);
+    transition:
+      box-shadow 0.4s ease,
+      transform 0.4s ease;
+  }
+
+  .glass-effect:hover {
+    --glass-depth: 26;
+    transform: translateY(-3px);
+    box-shadow: 0 calc(var(--glass-depth) * 0.6px) calc(var(--glass-depth) * 1.6px)
+      rgba(0, 0, 0, 0.38);
+  }
+
+  .glass-effect-static,
+  .glass-effect-static:hover {
+    --glass-depth: 20;
+    transform: none;
+    box-shadow: 0 calc(var(--glass-depth) * 0.5px) calc(var(--glass-depth) * 1.2px)
+      rgba(0, 0, 0, 0.28);
+  }
+
+  /* Borda com refração + dispersão */
+  .glass-effect::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      var(--glass-angle),
+      rgba(255, 255, 255, calc(0.5 * var(--glass-refraction))) 0%,
+      rgba(255, 255, 255, 0.1) 35%,
+      rgba(147, 197, 253, calc(0.3 * var(--glass-dispersion))) 50%,
+      rgba(255, 255, 255, 0.06) 65%,
+      rgba(251, 146, 132, calc(0.25 * var(--glass-dispersion))) 82%,
+      rgba(255, 255, 255, calc(0.2 * var(--glass-refraction))) 100%
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* Iluminação dispersa em diagonal — cobre o card sem preencher opaco */
+  .glass-effect::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    background:
+      radial-gradient(
+        ellipse 120% 90% at 0% 0%,
+        rgba(255, 255, 255, calc(0.12 * var(--glass-refraction))) 0%,
+        transparent 58%
+      ),
+      radial-gradient(
+        ellipse 100% 80% at 100% 0%,
+        rgba(147, 197, 253, calc(0.08 * var(--glass-dispersion))) 0%,
+        transparent 55%
+      ),
+      radial-gradient(
+        ellipse 90% 70% at 50% 100%,
+        rgba(251, 146, 132, calc(0.06 * var(--glass-dispersion))) 0%,
+        transparent 52%
+      ),
+      linear-gradient(
+        var(--glass-angle),
+        rgba(255, 255, 255, calc(0.07 * var(--glass-refraction))) 0%,
+        rgba(255, 255, 255, 0.03) 30%,
+        transparent 48%,
+        transparent 62%,
+        rgba(147, 197, 253, calc(0.04 * var(--glass-dispersion))) 100%
+      );
+    pointer-events: none;
+  }
+
+  .glass-effect > * {
+    position: relative;
+    z-index: 1;
+  }
+}
